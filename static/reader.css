@@ -1,0 +1,291 @@
+#read-body {
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+}
+
+.lexical-unit {
+    color: inherit;
+    background: transparent;
+    border: 0;
+    padding: 0;
+    margin: 0;
+    font: inherit;
+    line-height: inherit;
+    text-align: inherit;
+    text-decoration: none;
+    cursor: pointer;
+    border-radius: 4px;
+    white-space: inherit;
+
+    -webkit-box-decoration-break: clone;
+    box-decoration-break: clone;
+}
+
+.lexical-unit:hover,
+.lexical-unit.is-selected,
+.lexical-unit:focus-visible {
+    background: var(--blue);
+    color: var(--crust);
+    box-shadow: 0 0 0 2px var(--blue);
+    outline: none;
+    text-decoration: none;
+}
+
+.lexical-popup {
+    position: fixed;
+    z-index: 1000;
+    width: 340px;
+    max-width: calc(100vw - 24px);
+    max-height: calc(100dvh - 24px);
+    overflow-y: auto;
+    box-sizing: border-box;
+    padding: 1rem;
+    border: 1px solid var(--blue);
+    border-radius: 10px;
+    background: var(--mantle);
+    color: var(--text);
+    box-shadow: 0 12px 36px rgba(0, 0, 0, 0.4);
+    text-align: left;
+    line-height: 1.5;
+}
+
+.lexical-popup[hidden] {
+    display: none;
+}
+
+.lexical-popup h3 {
+    margin: 0 2rem 0.4rem 0;
+    color: var(--blue);
+}
+
+.lexical-popup-close {
+    position: absolute;
+    right: 0.6rem;
+    top: 0.4rem;
+    border: 0;
+    background: transparent;
+    color: var(--text);
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+
+.lexical-popup-status {
+    color: var(--subtext0);
+    font-size: 0.9rem;
+}
+
+.lexical-popup-retry {
+    margin-top: 0.5rem;
+}
+
+.article-title {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.lexical-popup-heart {
+    appearance: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    margin-top: 0.5rem;
+    border: none;
+    border-radius: 6px;
+    background: transparent;
+    color: var(--red);
+    cursor: pointer;
+}
+
+.lexical-popup-heart svg {
+    display: block;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    transition: transform 150ms ease;
+}
+
+.lexical-popup-heart.is-saved svg {
+    fill: currentColor;
+}
+
+.lexical-popup-heart:not(:disabled):hover svg {
+    transform: scale(1.1);
+}
+
+.lexical-popup-heart:focus-visible {
+    outline: 2px solid var(--red);
+    outline-offset: 2px;
+}
+
+.lexical-popup {
+    width: 420px;
+}
+
+.lexical-meta,
+.lexical-example-translation,
+.lexical-generated-note {
+    color: var(--subtext0);
+}
+
+.lexical-meta {
+    font-size: 0.9rem;
+}
+
+.lexical-meaning {
+    font-weight: 600;
+}
+
+.lexical-example {
+    margin-bottom: 0.25rem;
+}
+
+.lexical-example-translation {
+    margin-top: 0;
+    font-size: 0.9rem;
+}
+
+.lexical-generated-note {
+    font-size: 0.75rem;
+    margin-top: 1rem;
+}
+
+.lexical-conjugations {
+    margin-top: 0.75rem;
+    border-top: 1px solid var(--surface1);
+    padding-top: 0.5rem;
+}
+
+.lexical-conjugations details {
+    margin: 0.5rem 0;
+}
+
+.lexical-conjugations summary {
+    cursor: pointer;
+    color: var(--blue);
+    padding: 0.25rem 0;
+}
+
+.conjugation-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+}
+
+.conjugation-table th,
+.conjugation-table td {
+    padding: 0.3rem 0.4rem;
+    border-bottom: 1px solid var(--surface1);
+    text-align: left;
+    vertical-align: top;
+}
+
+.conjugation-table th {
+    width: 40%;
+    font-weight: normal;
+    color: var(--subtext0);
+}
+
+/* Override the existing centered flashcard-back layout. */
+.flashcard-back {
+    display: block;
+    overflow-y: auto;
+    text-align: left;
+    white-space: normal;
+    color: var(--text);
+    font-size: 1rem;
+}
+
+.srs-badge {
+    display: inline-block;
+    margin: 0.4rem 0;
+    padding: 0.2rem 0.55rem;
+    border-radius: 6px;
+    background: var(--surface0);
+    color: var(--subtext0);
+    font-size: 0.8rem;
+}
+
+.srs-badge[data-state="new"] {
+    color: var(--mauve);
+}
+
+.srs-badge[data-state="learning"] {
+    color: var(--peach);
+}
+
+.srs-badge[data-state="learnt"] {
+    color: var(--green);
+}
+
+.lexical-unit[data-srs-state="new"] {
+    border-bottom: 1px dotted var(--mauve);
+}
+
+.lexical-unit[data-srs-state="learning"] {
+    border-bottom: 1px dotted var(--peach);
+}
+
+.lexical-unit[data-srs-state="learnt"] {
+    border-bottom: 1px dotted var(--green);
+}
+
+/* Stack review sections without compressing them into one another. */
+#revise-view {
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 1rem;
+    overflow-y: auto;
+    box-sizing: border-box;
+}
+
+#revise-view > * {
+    flex-shrink: 0;
+    max-width: 100%;
+}
+
+#revise-view .flashcard {
+    width: min(500px, 100%);
+    margin: 0;
+}
+
+#revise-view .review-hints,
+#revise-view .review-note {
+    margin: 0;
+    text-align: center;
+}
+
+#revise-view .srs-controls,
+#revise-view .review-tools {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    width: 100%;
+}
+
+#revise-view .review-tools {
+    padding-top: 1rem;
+    border-top: 1px solid var(--surface1);
+}
+
+#review-summary,
+#review-status {
+    text-align: center;
+    overflow-wrap: anywhere;
+}
+
+#review-status:empty {
+    display: none;
+}
+
+#revise-view [hidden] {
+    display: none !important;
+}

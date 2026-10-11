@@ -2,10 +2,12 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
     <title>Apprendre</title>
+
     <style>
         :root {
-            /* Catppuccin Mocha Palette */
             --base: #1e1e2e;
             --mantle: #181825;
             --crust: #11111b;
@@ -22,26 +24,42 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            font-family:
+                -apple-system,
+                BlinkMacSystemFont,
+                "Montserrat",
+                "EB Garamond",
+                "Segoe UI",
+                Roboto,
+                Helvetica,
+                Arial,
+                sans-serif;
             background-color: var(--base);
             color: var(--text);
             margin: 0;
             height: 100vh;
+            height: 100dvh;
             display: flex;
             flex-direction: column;
         }
 
-        /* Navigation */
         nav {
             background-color: var(--crust);
             padding: 1rem 2rem;
             display: flex;
+            align-items: center;
             gap: 1.5rem;
             border-bottom: 2px solid var(--surface0);
+            flex-shrink: 0;
         }
-        
-        nav h1 { margin: 0; font-size: 1.5rem; color: var(--mauve); padding-right: 2rem; }
-        
+
+        nav h1 {
+            margin: 0;
+            font-size: 1.5rem;
+            color: var(--mauve);
+            padding-right: 2rem;
+        }
+
         .nav-btn {
             background: transparent;
             color: var(--subtext0);
@@ -52,16 +70,34 @@
             border-radius: 6px;
             transition: all 0.2s ease;
         }
-        
-        .nav-btn:hover { background-color: var(--surface0); color: var(--text); }
-        .nav-btn.active { background-color: var(--surface1); color: var(--blue); font-weight: bold; }
+
+        .nav-btn:hover {
+            background-color: var(--surface0);
+            color: var(--text);
+        }
+
+        .nav-btn.active {
+            background-color: var(--surface1);
+            color: var(--blue);
+            font-weight: bold;
+        }
 
         /* Views */
-        .view { display: none; flex: 1; overflow: hidden; padding: 2rem; }
-        .view.active { display: flex; }
+        .view {
+            display: none;
+            flex: 1;
+            min-height: 0;
+            overflow: hidden;
+            padding: 2rem;
+        }
+
+        .view.active {
+            display: flex;
+        }
 
         /* General Forms & Buttons */
-        input, textarea {
+        input,
+        textarea {
             background-color: var(--surface0);
             color: var(--text);
             border: 1px solid var(--surface2);
@@ -71,9 +107,13 @@
             box-sizing: border-box;
             font-family: inherit;
         }
-        
-        input:focus, textarea:focus { outline: none; border-color: var(--mauve); }
-        
+
+        input:focus,
+        textarea:focus {
+            outline: none;
+            border-color: var(--mauve);
+        }
+
         button.primary {
             background-color: var(--mauve);
             color: var(--crust);
@@ -85,23 +125,84 @@
             font-size: 1rem;
             transition: opacity 0.2s;
         }
-        
-        button.primary:hover { opacity: 0.9; }
+
+        button.secondary {
+            background-color: var(--surface0);
+            color: var(--text);
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.2s;
+        }
+
+        button.primary:hover {
+            opacity: 0.9;
+        }
+
+        button.secondary:hover {
+            background-color: var(--surface1);
+        }
+
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Keyboard Hints */
+        kbd {
+            background-color: var(--surface1);
+            color: var(--text);
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-family: monospace;
+            border-bottom: 2px solid var(--surface2);
+        }
 
         /* Add Mode */
-        #add-view { max-width: 800px; margin: 0 auto; flex-direction: column; gap: 1.5rem; }
-        #toast { padding: 1rem; border-radius: 6px; display: none; margin-bottom: 1rem; }
+        #add-view {
+            width: 75%;
+            margin: 0 auto;
+            flex-direction: column;
+            gap: 1.5rem;
+            overflow-y: auto;
+            box-sizing: border-box;
+        }
+
+        #toast {
+            padding: 1rem;
+            border-radius: 6px;
+            display: none;
+            margin-bottom: 1rem;
+        }
+
+        .form-field {
+            margin-bottom: 1rem;
+        }
+
+        .form-field label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--subtext0);
+        }
 
         /* Read Mode */
-        #read-view { padding: 0; flex-direction: row; }
+        #read-view {
+            padding: 0;
+            flex-direction: row;
+        }
+
         .sidebar {
             width: 300px;
+            flex-shrink: 0;
             background-color: var(--mantle);
             border-right: 2px solid var(--surface0);
             overflow-y: auto;
             display: flex;
             flex-direction: column;
         }
+
         .article-item {
             padding: 1rem;
             border-bottom: 1px solid var(--surface0);
@@ -110,36 +211,118 @@
             align-items: center;
             gap: 0.75rem;
         }
-        .article-item:hover { background-color: var(--surface0); }
-        .article-item.selected { background-color: var(--surface1); border-left: 4px solid var(--blue); }
-        
+
+        .article-item:hover {
+            background-color: var(--surface0);
+        }
+
+        .article-item.selected {
+            background-color: var(--surface1);
+            border-left: 4px solid var(--blue);
+        }
+
+        .article-item:focus-visible {
+            outline: 2px solid var(--blue);
+            outline-offset: -2px;
+        }
+
+        .article-title {
+            min-width: 0;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .sidebar-message {
+            padding: 1rem;
+            color: var(--subtext0);
+        }
+
         .content-area {
             flex: 1;
+            min-width: 0;
             padding: 3rem;
             overflow-y: auto;
             line-height: 1.8;
             font-size: 1.1rem;
+            text-align: justify;
+            text-justify: inter-word;
         }
-        .content-area h2 { color: var(--mauve); margin-top: 0; }
+
+        .content-area h2 {
+            color: var(--mauve);
+            margin-top: 0;
+        }
+
+        #read-placeholder {
+            color: var(--subtext0);
+            text-align: center;
+            margin-top: 20%;
+        }
+
+        .read-actions {
+            margin-bottom: 2rem;
+            color: var(--subtext0);
+        }
+
+        #mark-read-btn {
+            font-size: 0.9rem;
+            padding: 0.5rem 1rem;
+        }
+
+        #read-status {
+            display: block;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+            color: var(--subtext0);
+        }
 
         /* Revise Mode */
-        #revise-view { align-items: center; justify-content: center; flex-direction: column; }
+        #revise-view {
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            overflow-y: auto;
+        }
+
+        .review-hints {
+            color: var(--subtext0);
+            margin-bottom: 1.5rem;
+            font-size: 0.95rem;
+            text-align: center;
+        }
+
         .flashcard {
             width: 500px;
-            height: 300px;
+            max-width: 100%;
+            height: 500px;
+            flex-shrink: 0;
             perspective: 1000px;
             cursor: pointer;
+            margin-bottom: 2rem;
         }
+
+        .flashcard:focus-visible {
+            outline: 2px solid var(--blue);
+            outline-offset: 6px;
+            border-radius: 12px;
+        }
+
         .flashcard-inner {
             position: relative;
             width: 100%;
             height: 100%;
             text-align: center;
-            transition: transform 0.6s;
+            transition: transform 0.4s cubic-bezier(0.4, 0.0, 0.2, 1);
             transform-style: preserve-3d;
         }
-        .flashcard.flipped .flashcard-inner { transform: rotateX(180deg); }
-        .flashcard-front, .flashcard-back {
+
+        .flashcard.flipped .flashcard-inner {
+            transform: rotateX(180deg);
+        }
+
+        .flashcard-front,
+        .flashcard-back {
             position: absolute;
             width: 100%;
             height: 100%;
@@ -150,59 +333,128 @@
             justify-content: center;
             font-size: 2rem;
             border-radius: 12px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
             padding: 2rem;
             box-sizing: border-box;
+            white-space: pre-wrap;
+            overflow-wrap: anywhere;
+            overflow-y: auto;
         }
-        .flashcard-front { background-color: var(--surface0); color: var(--text); }
-        .flashcard-back { background-color: var(--surface1); color: var(--green); transform: rotateX(180deg); }
-        .srs-controls { margin-top: 2rem; display: flex; gap: 1rem; }
-        .srs-controls button { background-color: var(--surface0); color: var(--text); border: none; padding: 0.8rem 2rem; border-radius: 6px; cursor: pointer; }
-        .srs-controls button:hover { background-color: var(--surface1); }
+
+        .flashcard-front {
+            background-color: var(--surface0);
+            color: var(--text);
+        }
+
+        .flashcard-back {
+            background-color: var(--surface1);
+            color: var(--green);
+            transform: rotateX(180deg);
+            font-size: 1.35rem;
+        }
+
+        .srs-controls {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .review-note {
+            color: var(--subtext0);
+            font-size: 0.85rem;
+            text-align: center;
+            margin-top: 1rem;
+        }
+
+        /* Small-screen adjustments; desktop appearance stays the same. */
+        @media (max-width: 700px) {
+            nav {
+                padding: 0.8rem 1rem;
+                gap: 0.5rem;
+                flex-wrap: wrap;
+            }
+
+            nav h1 {
+                padding-right: 0.5rem;
+            }
+
+            .nav-btn {
+                font-size: 1rem;
+                padding: 0.5rem 0.75rem;
+            }
+
+            .sidebar {
+                width: 160px;
+            }
+
+            .article-item {
+                padding: 0.8rem;
+                gap: 0.5rem;
+            }
+
+            .content-area {
+                padding: 1.25rem;
+            }
+
+            #add-view {
+                width: 100%;
+                padding: 1.25rem;
+            }
+
+            #revise-view {
+                padding: 1.25rem;
+            }
+        }
     </style>
+
+    <!-- Existing reader styles and behavior from the previous patch. -->
+    <link rel="stylesheet" href="/static/reader.css">
+    <script defer src="/static/lexical-details.js"></script>
+    <script defer src="/static/reader.js"></script>
+    <script defer src="/static/review.js"></script>
 </head>
 <body>
-
-    <nav>
+    <nav aria-label="Main navigation">
         <h1>Apprendre</h1>
-        <button class="nav-btn active" onclick="switchView('add')">➕ Add</button>
-        <button class="nav-btn" onclick="switchView('read')">📖 Read</button>
-        <button class="nav-btn" onclick="switchView('revise')">🧠 Revise</button>
+        <button type="button" class="nav-btn active" onclick="switchView('read', this)">📖 Read</button>
+        <button type="button" class="nav-btn" onclick="switchView('revise', this)">💡 Revise</button>
+        <button type="button" class="nav-btn" onclick="switchView('add', this)">➕ Add</button>
     </nav>
 
-    <!-- Add Mode -->
-    <div id="add-view" class="view active">
-        <h2>Ingest New Corpus Data</h2>
-        <div id="toast"></div>
-        <form id="ingest-form" onsubmit="submitCorpus(event)">
-            <div style="margin-bottom: 1rem;">
-                <label style="display:block; margin-bottom: 0.5rem; color: var(--subtext0);">Title</label>
-                <input type="text" id="title" name="title" required>
-            </div>
-            <div style="margin-bottom: 1rem;">
-                <label style="display:block; margin-bottom: 0.5rem; color: var(--subtext0);">Content</label>
-                <textarea id="text" name="text" rows="15" required></textarea>
-            </div>
-            <button type="submit" class="primary">Ingest Document</button>
-        </form>
-    </div>
-
     <!-- Read Mode -->
-    <div id="read-view" class="view">
-        <div class="sidebar" id="article-list">
-            <!-- Populated by JS -->
+    <div id="read-view" class="view active">
+        <div
+            class="sidebar"
+            id="article-list"
+            aria-label="Articles"
+        >
+            <div class="sidebar-message">Loading articles…</div>
         </div>
+
         <div class="content-area">
-            <div id="article-content" style="display:none;">
+            <div id="article-content" style="display: none;">
                 <h2 id="read-title"></h2>
-                <div style="margin-bottom: 2rem; color: var(--subtext0);">
-                    <button class="primary" id="mark-read-btn" onclick="markCurrentAsRead()" style="font-size: 0.9rem; padding: 0.5rem 1rem;">
-                        Mark as Read
-                    </button>
+
+                <div class="read-actions">
+                    <button
+                        type="button"
+                        class="primary"
+                        id="mark-read-btn"
+                        onclick="markCurrentAsRead()"
+                    >Mark as Read</button>
+
+                    <span
+                        id="read-status"
+                        role="status"
+                        aria-live="polite"
+                    ></span>
                 </div>
-                <div id="read-body" style="white-space: pre-wrap;"></div>
+
+                <div id="read-body" lang="fr"></div>
             </div>
-            <div id="read-placeholder" style="color: var(--subtext0); text-align: center; margin-top: 20%;">
+
+            <div id="read-placeholder" role="status">
                 Select an article from the sidebar to begin reading.
             </div>
         </div>
@@ -210,123 +462,358 @@
 
     <!-- Revise Mode -->
     <div id="revise-view" class="view">
-        <div class="flashcard" onclick="this.classList.toggle('flipped')">
+        <div class="review-hints"> <kbd>⎵</kbd> to flip. &nbsp;|&nbsp; <kbd>1</kbd> Again <kbd>2</kbd> Hard <kbd>3</kbd> Good <kbd>4</kbd> Easy </div>
+        <div id="review-summary" role="status" aria-live="polite"></div>
+        <div id="review-state" class="srs-badge"></div>
+        <div class="review-hints">  </div>
+
+        <div class="flashcard" id="flashcard" role="group" tabindex="0" aria-label="Vocabulary review card">
             <div class="flashcard-inner">
-                <div class="flashcard-front" id="fc-front">Loading...</div>
-                <div class="flashcard-back" id="fc-back">Loading...</div>
+                <div class="flashcard-front" id="fc-front"> Loading… </div>
+                <div class="flashcard-back" id="fc-back"> Loading… </div>
             </div>
         </div>
+
         <div class="srs-controls">
-            <button onclick="nextCard()">Next Card ➔</button>
+            <button id="review-flip" type="button" class="secondary"> Reveal answer </button>
+            <button type="button" class="secondary" data-rating="again" disabled>Again</button>
+            <button type="button" class="secondary" data-rating="hard" disabled>Hard</button>
+            <button type="button" class="primary" data-rating="good" disabled>Good</button>
+            <button type="button" class="secondary" data-rating="easy" disabled>Easy</button>
+        </div>
+        
+        <div id="review-status" role="status" aria-live="polite"></div>
+        
+        <div class="review-tools">
+            <button id="review-retry" type="button" class="secondary" hidden>Retry saving review</button>
+            <button id="review-refresh" type="button" class="secondary">Refresh due cards</button>
+        </div>
+        
+        <div class="review-note">
+            Again: forgot. Hard: remembered with difficulty.
+            Good: remembered. Easy: remembered immediately.
+            Reviews and scheduling are saved automatically.
         </div>
     </div>
 
+    <div id="add-view" class="view">
+        <h2>Add a New Article</h2>
+        <div id="toast" role="status" aria-live="polite"></div>
+        <form id="ingest-form" onsubmit="submitCorpus(event)">
+            <div class="form-field">
+                <label for="title">Title</label>
+                <input type="text" id="title" name="title" maxlength="500" required>
+            </div>
+            <div class="form-field">
+                <label for="text">Content</label>
+                <textarea id="text" name="text" rows="15" maxlength="200000" required style="min-height: 400px; resize: vertical;"></textarea>
+            </div>
+            <button type="submit" class="primary">Add</button>
+        </form>
+    </div>
+
+    <!-- Vocabulary popup: IDs must match static/reader.js. -->
+    <section id="lexical-popup" class="lexical-popup" role="dialog" aria-labelledby="lexical-popup-title" hidden>
+        <button id="lexical-popup-heart" class="lexical-popup-heart" type="button" aria-label="Add to learning list" aria-pressed="false" aria-busy="false" title="Add to learning list">
+            <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false">
+                <path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8Z"/>
+            </svg>
+        </button>
+        <button id="lexical-popup-close" class="lexical-popup-close" type="button" aria-label="Close vocabulary dialogue">×</button>
+
+        <h3 id="lexical-popup-title"></h3>
+
+        <div id="lexical-popup-canonical"></div>
+        <span id="lexical-popup-srs-state" class="srs-badge"></span>
+
+
+        <div id="lexical-popup-lookup-status" role="status" aria-live="polite"></div>
+        <div id="lexical-popup-details"></div>
+        <button id="lexical-popup-lookup-retry" class="secondary" type="button" hidden> Retry meaning lookup?</button>
+        <div id="lexical-popup-status" class="lexical-popup-status" role="status" aria-live="polite"></div>
+        <button id="lexical-popup-retry" class="secondary lexical-popup-retry" type="button" hidden>Retry saving</button>
+    </section>
+
     <script>
+        // --- State ---
         let currentArticleId = null;
-        let flashcards = [];
-        let currentCardIndex = 0;
+        let articleRequestVersion = 0;
+        let sidebarRequestVersion = 0;
+        let toastTimer = null;
 
-        // View Routing
-        function switchView(viewName) {
-            document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-            
-            document.getElementById(`${viewName}-view`).classList.add('active');
-            event.target.classList.add('active');
 
-            if (viewName === 'read') loadSidebar();
-            if (viewName === 'revise' && flashcards.length === 0) loadFlashcards();
-        }
-
-        // Add Mode Logic
-        async function submitCorpus(e) {
-            e.preventDefault();
-            const form = e.target;
-            const formData = new FormData(form);
-            const toast = document.getElementById('toast');
-
-            const response = await fetch('/api/ingest', { method: 'POST', body: formData });
-            const data = await response.json();
-
-            toast.style.display = 'block';
-            if (data.success) {
-                toast.style.backgroundColor = 'rgba(166, 227, 161, 0.2)'; // Green tint
-                toast.style.borderLeft = '4px solid var(--green)';
-                toast.textContent = 'Success! Document ingested.';
-                form.reset();
-            } else {
-                toast.style.backgroundColor = 'rgba(243, 139, 168, 0.2)'; // Red tint
-                toast.style.borderLeft = '4px solid var(--red)';
-                toast.textContent = data.result; // Near-duplicate message
+        // --- Initialization ---
+        // reader.js is deferred and will initialize before this event runs.
+        document.addEventListener("DOMContentLoaded", () => {
+            if (!window.ArticleReader) {
+                document.getElementById("article-list").textContent =
+                    "Reader failed to load. Check /static/reader.js.";
+                return;
             }
-            setTimeout(() => toast.style.display = 'none', 4000);
+
+            refreshSidebar();
+        });
+
+        // --- View Routing ---
+        function switchView(viewName, button) {
+            ArticleReader.close();
+
+            document.querySelectorAll(".view").forEach(view => {
+                view.classList.remove("active");
+            });
+
+            document.querySelectorAll(".nav-btn").forEach(navButton => {
+                navButton.classList.remove("active");
+            });
+
+            document.getElementById(`${viewName}-view`)
+                .classList.add("active");
+
+            button.classList.add("active");
+
+            if (viewName === "read") {
+                refreshSidebar();
+            }
+
+            // Reload on every visit to include newly saved vocabulary.
+            if (viewName === "revise") {
+                loadFlashcards();
+            }
         }
 
-        // Read Mode Logic
+        // --- Add Mode ---
+        function showToast(message, success) {
+            const toast = document.getElementById("toast");
+
+            clearTimeout(toastTimer);
+
+            toast.style.display = "block";
+            toast.style.backgroundColor = success
+                ? "rgba(166, 227, 161, 0.2)"
+                : "rgba(243, 139, 168, 0.2)";
+
+            toast.style.borderLeft = success
+                ? "4px solid var(--green)"
+                : "4px solid var(--red)";
+
+            toast.textContent = message;
+
+            toastTimer = setTimeout(() => {
+                toast.style.display = "none";
+            }, 6000);
+        }
+
+        async function submitCorpus(event) {
+            event.preventDefault();
+
+            const form = event.target;
+            const submitButton = form.querySelector(
+                'button[type="submit"]'
+            );
+
+            if (submitButton.disabled) return;
+
+            submitButton.disabled = true;
+
+            try {
+                const data = await ArticleReader.requestJSON(
+                    "/api/ingest",
+                    {
+                        method: "POST",
+                        body: new FormData(form),
+                    }
+                );
+
+                if (data.success) {
+                    showToast("Success! Document ingested.", true);
+                    form.reset();
+                    await refreshSidebar();
+                } else {
+                    showToast(
+                        data.result || "Document could not be ingested.",
+                        false
+                    );
+                }
+            } catch (error) {
+                showToast(`Could not ingest document: ${error.message}`, false);
+            } finally {
+                submitButton.disabled = false;
+            }
+        }
+
+        // --- Read Mode ---
+        async function refreshSidebar() {
+            try {
+                await loadSidebar();
+            } catch (error) {
+                const list = document.getElementById("article-list");
+                const message = document.createElement("div");
+
+                message.className = "sidebar-message";
+                message.textContent =
+                    `Could not load articles: ${error.message}`;
+
+                list.replaceChildren(message);
+            }
+        }
+
         async function loadSidebar() {
-            const list = document.getElementById('article-list');
-            const res = await fetch('/api/articles');
-            const articles = await res.json();
-            
-            list.innerHTML = articles.map(art => `
-                <div class="article-item" id="item-${art.id}" onclick="loadArticle('${art.id}')">
-                    <span>${art.read_status ? '✅' : '📖'}</span>
-                    <span style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
-                        ${art.title}
-                    </span>
-                </div>
-            `).join('');
+            const requestVersion = ++sidebarRequestVersion;
+            let articles;
+
+            try {
+                articles = await ArticleReader.requestJSON("/api/articles");
+            } catch (error) {
+                if (requestVersion !== sidebarRequestVersion) return;
+                throw error;
+            }
+
+            if (requestVersion !== sidebarRequestVersion) return;
+
+            const list = document.getElementById("article-list");
+
+            // Unread first, then newest within each group.
+            articles.sort((a, b) => {
+                if (a.read_status !== b.read_status) {
+                    return a.read_status ? 1 : -1;
+                }
+
+                return (b.timestamp || 0) - (a.timestamp || 0);
+            });
+
+            const fragment = document.createDocumentFragment();
+
+            if (articles.length === 0) {
+                const message = document.createElement("div");
+                message.className = "sidebar-message";
+                message.textContent =
+                    "No articles yet. Use Add to ingest your first article.";
+                fragment.append(message);
+            }
+
+            for (const article of articles) {
+                const item = document.createElement("div");
+
+                item.className = "article-item";
+                item.id = `item-${article.id}`;
+                item.tabIndex = 0;
+                item.setAttribute("role", "button");
+
+                if (article.id === currentArticleId) {
+                    item.classList.add("selected");
+                }
+
+                const icon = document.createElement("span");
+                icon.textContent = article.read_status ? "✅" : "📖";
+                icon.setAttribute("aria-hidden", "true");
+
+                const title = document.createElement("span");
+                title.className = "article-title";
+                title.textContent = article.title;
+
+                item.append(icon, title);
+
+                item.addEventListener("click", () => {
+                    loadArticle(article.id);
+                });
+
+                item.addEventListener("keydown", event => {
+                    if (event.key === "Enter" || event.key === " ") {
+                        event.preventDefault();
+                        loadArticle(article.id);
+                    }
+                });
+
+                fragment.append(item);
+            }
+
+            list.replaceChildren(fragment);
         }
 
         async function loadArticle(id) {
-            document.querySelectorAll('.article-item').forEach(el => el.classList.remove('selected'));
-            document.getElementById(`item-${id}`).classList.add('selected');
+            const requestVersion = ++articleRequestVersion;
+
+            ArticleReader.close();
             currentArticleId = id;
 
-            const res = await fetch(`/api/articles/${id}`);
-            const data = await res.json();
+            document.querySelectorAll(".article-item").forEach(item => {
+                item.classList.toggle(
+                    "selected",
+                    item.id === `item-${id}`
+                );
+            });
 
-            document.getElementById('read-placeholder').style.display = 'none';
-            document.getElementById('article-content').style.display = 'block';
-            document.getElementById('read-title').textContent = data.title;
-            document.getElementById('read-body').textContent = data.text;
-            
-            const btn = document.getElementById('mark-read-btn');
-            if (data.read_status) {
-                btn.style.display = 'none';
-            } else {
-                btn.style.display = 'inline-block';
+            const placeholder = document.getElementById("read-placeholder");
+            const content = document.getElementById("article-content");
+            const readStatus = document.getElementById("read-status");
+
+            content.style.display = "none";
+            placeholder.style.display = "block";
+            placeholder.textContent = "Loading article…";
+            readStatus.textContent = "";
+
+            try {
+                const data = await ArticleReader.requestJSON(
+                    `/api/articles/${encodeURIComponent(id)}`
+                );
+
+                // Ignore an older response if another article was selected.
+                if (requestVersion !== articleRequestVersion) return;
+
+                document.getElementById("read-title").textContent = data.title;
+                ArticleReader.render(data);
+
+                placeholder.style.display = "none";
+                content.style.display = "block";
+
+                document.getElementById("mark-read-btn").style.display =
+                    data.read_status ? "none" : "inline-block";
+            } catch (error) {
+                if (requestVersion !== articleRequestVersion) return;
+
+                placeholder.textContent =
+                    `Could not load article: ${error.message}`;
             }
         }
 
         async function markCurrentAsRead() {
             if (!currentArticleId) return;
-            await fetch(`/api/articles/${currentArticleId}/read`, { method: 'POST' });
-            loadSidebar(); // Refresh emoji status
-            document.getElementById('mark-read-btn').style.display = 'none';
-        }
 
-        // Revise Mode Logic
-        async function loadFlashcards() {
-            const res = await fetch('/api/flashcards/dummy');
-            flashcards = await res.json();
-            showCard(0);
-        }
+            const articleId = currentArticleId;
+            const requestVersion = articleRequestVersion;
+            const button = document.getElementById("mark-read-btn");
+            const status = document.getElementById("read-status");
 
-        function showCard(index) {
-            if (flashcards.length === 0) return;
-            const card = document.querySelector('.flashcard');
-            card.classList.remove('flipped'); // Reset flip state
-            
-            setTimeout(() => {
-                document.getElementById('fc-front').textContent = flashcards[index].front;
-                document.getElementById('fc-back').textContent = flashcards[index].back;
-            }, 150); // Small delay to prevent seeing the text swap during transition
-        }
+            if (button.disabled) return;
 
-        function nextCard() {
-            currentCardIndex = (currentCardIndex + 1) % flashcards.length;
-            showCard(currentCardIndex);
+            button.disabled = true;
+            status.textContent = "";
+
+            try {
+                await ArticleReader.requestJSON(
+                    `/api/articles/${encodeURIComponent(articleId)}/read`,
+                    { method: "POST" }
+                );
+
+                if (
+                    currentArticleId === articleId &&
+                    articleRequestVersion === requestVersion
+                ) {
+                    button.style.display = "none";
+                }
+
+                await refreshSidebar();
+            } catch (error) {
+                if (
+                    currentArticleId === articleId &&
+                    articleRequestVersion === requestVersion
+                ) {
+                    status.textContent =
+                        `Could not mark article as read: ${error.message}`;
+                }
+            } finally {
+                button.disabled = false;
+            }
         }
     </script>
 </body>
