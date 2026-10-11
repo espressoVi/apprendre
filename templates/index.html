@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Apprendre</title>
+    <style>
+        :root {
+            /* Catppuccin Mocha Palette */
+            --base: #1e1e2e;
+            --mantle: #181825;
+            --crust: #11111b;
+            --text: #cdd6f4;
+            --subtext0: #a6adc8;
+            --surface0: #313244;
+            --surface1: #45475a;
+            --surface2: #585b70;
+            --mauve: #cba6f7;
+            --blue: #89b4fa;
+            --green: #a6e3a1;
+            --red: #f38ba8;
+            --peach: #fab387;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--base);
+            color: var(--text);
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Navigation */
+        nav {
+            background-color: var(--crust);
+            padding: 1rem 2rem;
+            display: flex;
+            gap: 1.5rem;
+            border-bottom: 2px solid var(--surface0);
+        }
+        
+        nav h1 { margin: 0; font-size: 1.5rem; color: var(--mauve); padding-right: 2rem; }
+        
+        .nav-btn {
+            background: transparent;
+            color: var(--subtext0);
+            border: none;
+            font-size: 1.1rem;
+            cursor: pointer;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+        }
+        
+        .nav-btn:hover { background-color: var(--surface0); color: var(--text); }
+        .nav-btn.active { background-color: var(--surface1); color: var(--blue); font-weight: bold; }
+
+        /* Views */
+        .view { display: none; flex: 1; overflow: hidden; padding: 2rem; }
+        .view.active { display: flex; }
+
+        /* General Forms & Buttons */
+        input, textarea {
+            background-color: var(--surface0);
+            color: var(--text);
+            border: 1px solid var(--surface2);
+            padding: 1rem;
+            border-radius: 6px;
+            width: 100%;
+            box-sizing: border-box;
+            font-family: inherit;
+        }
+        
+        input:focus, textarea:focus { outline: none; border-color: var(--mauve); }
+        
+        button.primary {
+            background-color: var(--mauve);
+            color: var(--crust);
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: opacity 0.2s;
+        }
+        
+        button.primary:hover { opacity: 0.9; }
+
+        /* Add Mode */
+        #add-view { max-width: 800px; margin: 0 auto; flex-direction: column; gap: 1.5rem; }
+        #toast { padding: 1rem; border-radius: 6px; display: none; margin-bottom: 1rem; }
+
+        /* Read Mode */
+        #read-view { padding: 0; flex-direction: row; }
+        .sidebar {
+            width: 300px;
+            background-color: var(--mantle);
+            border-right: 2px solid var(--surface0);
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+        }
+        .article-item {
+            padding: 1rem;
+            border-bottom: 1px solid var(--surface0);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        .article-item:hover { background-color: var(--surface0); }
+        .article-item.selected { background-color: var(--surface1); border-left: 4px solid var(--blue); }
+        
+        .content-area {
+            flex: 1;
+            padding: 3rem;
+            overflow-y: auto;
+            line-height: 1.8;
+            font-size: 1.1rem;
+        }
+        .content-area h2 { color: var(--mauve); margin-top: 0; }
+
+        /* Revise Mode */
+        #revise-view { align-items: center; justify-content: center; flex-direction: column; }
+        .flashcard {
+            width: 500px;
+            height: 300px;
+            perspective: 1000px;
+            cursor: pointer;
+        }
+        .flashcard-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+        .flashcard.flipped .flashcard-inner { transform: rotateX(180deg); }
+        .flashcard-front, .flashcard-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            padding: 2rem;
+            box-sizing: border-box;
+        }
+        .flashcard-front { background-color: var(--surface0); color: var(--text); }
+        .flashcard-back { background-color: var(--surface1); color: var(--green); transform: rotateX(180deg); }
+        .srs-controls { margin-top: 2rem; display: flex; gap: 1rem; }
+        .srs-controls button { background-color: var(--surface0); color: var(--text); border: none; padding: 0.8rem 2rem; border-radius: 6px; cursor: pointer; }
+        .srs-controls button:hover { background-color: var(--surface1); }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <h1>Apprendre</h1>
+        <button class="nav-btn active" onclick="switchView('add')">➕ Add</button>
+        <button class="nav-btn" onclick="switchView('read')">📖 Read</button>
+        <button class="nav-btn" onclick="switchView('revise')">🧠 Revise</button>
+    </nav>
+
+    <!-- Add Mode -->
+    <div id="add-view" class="view active">
+        <h2>Ingest New Corpus Data</h2>
+        <div id="toast"></div>
+        <form id="ingest-form" onsubmit="submitCorpus(event)">
+            <div style="margin-bottom: 1rem;">
+                <label style="display:block; margin-bottom: 0.5rem; color: var(--subtext0);">Title</label>
+                <input type="text" id="title" name="title" required>
+            </div>
+            <div style="margin-bottom: 1rem;">
+                <label style="display:block; margin-bottom: 0.5rem; color: var(--subtext0);">Content</label>
+                <textarea id="text" name="text" rows="15" required></textarea>
+            </div>
+            <button type="submit" class="primary">Ingest Document</button>
+        </form>
+    </div>
+
+    <!-- Read Mode -->
+    <div id="read-view" class="view">
+        <div class="sidebar" id="article-list">
+            <!-- Populated by JS -->
+        </div>
+        <div class="content-area">
+            <div id="article-content" style="display:none;">
+                <h2 id="read-title"></h2>
+                <div style="margin-bottom: 2rem; color: var(--subtext0);">
+                    <button class="primary" id="mark-read-btn" onclick="markCurrentAsRead()" style="font-size: 0.9rem; padding: 0.5rem 1rem;">
+                        Mark as Read
+                    </button>
+                </div>
+                <div id="read-body" style="white-space: pre-wrap;"></div>
+            </div>
+            <div id="read-placeholder" style="color: var(--subtext0); text-align: center; margin-top: 20%;">
+                Select an article from the sidebar to begin reading.
+            </div>
+        </div>
+    </div>
+
+    <!-- Revise Mode -->
+    <div id="revise-view" class="view">
+        <div class="flashcard" onclick="this.classList.toggle('flipped')">
+            <div class="flashcard-inner">
+                <div class="flashcard-front" id="fc-front">Loading...</div>
+                <div class="flashcard-back" id="fc-back">Loading...</div>
+            </div>
+        </div>
+        <div class="srs-controls">
+            <button onclick="nextCard()">Next Card ➔</button>
+        </div>
+    </div>
+
+    <script>
+        let currentArticleId = null;
+        let flashcards = [];
+        let currentCardIndex = 0;
+
+        // View Routing
+        function switchView(viewName) {
+            document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+            
+            document.getElementById(`${viewName}-view`).classList.add('active');
+            event.target.classList.add('active');
+
+            if (viewName === 'read') loadSidebar();
+            if (viewName === 'revise' && flashcards.length === 0) loadFlashcards();
+        }
+
+        // Add Mode Logic
+        async function submitCorpus(e) {
+            e.preventDefault();
+            const form = e.target;
+            const formData = new FormData(form);
+            const toast = document.getElementById('toast');
+
+            const response = await fetch('/api/ingest', { method: 'POST', body: formData });
+            const data = await response.json();
+
+            toast.style.display = 'block';
+            if (data.success) {
+                toast.style.backgroundColor = 'rgba(166, 227, 161, 0.2)'; // Green tint
+                toast.style.borderLeft = '4px solid var(--green)';
+                toast.textContent = 'Success! Document ingested.';
+                form.reset();
+            } else {
+                toast.style.backgroundColor = 'rgba(243, 139, 168, 0.2)'; // Red tint
+                toast.style.borderLeft = '4px solid var(--red)';
+                toast.textContent = data.result; // Near-duplicate message
+            }
+            setTimeout(() => toast.style.display = 'none', 4000);
+        }
+
+        // Read Mode Logic
+        async function loadSidebar() {
+            const list = document.getElementById('article-list');
+            const res = await fetch('/api/articles');
+            const articles = await res.json();
+            
+            list.innerHTML = articles.map(art => `
+                <div class="article-item" id="item-${art.id}" onclick="loadArticle('${art.id}')">
+                    <span>${art.read_status ? '✅' : '📖'}</span>
+                    <span style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                        ${art.title}
+                    </span>
+                </div>
+            `).join('');
+        }
+
+        async function loadArticle(id) {
+            document.querySelectorAll('.article-item').forEach(el => el.classList.remove('selected'));
+            document.getElementById(`item-${id}`).classList.add('selected');
+            currentArticleId = id;
+
+            const res = await fetch(`/api/articles/${id}`);
+            const data = await res.json();
+
+            document.getElementById('read-placeholder').style.display = 'none';
+            document.getElementById('article-content').style.display = 'block';
+            document.getElementById('read-title').textContent = data.title;
+            document.getElementById('read-body').textContent = data.text;
+            
+            const btn = document.getElementById('mark-read-btn');
+            if (data.read_status) {
+                btn.style.display = 'none';
+            } else {
+                btn.style.display = 'inline-block';
+            }
+        }
+
+        async function markCurrentAsRead() {
+            if (!currentArticleId) return;
+            await fetch(`/api/articles/${currentArticleId}/read`, { method: 'POST' });
+            loadSidebar(); // Refresh emoji status
+            document.getElementById('mark-read-btn').style.display = 'none';
+        }
+
+        // Revise Mode Logic
+        async function loadFlashcards() {
+            const res = await fetch('/api/flashcards/dummy');
+            flashcards = await res.json();
+            showCard(0);
+        }
+
+        function showCard(index) {
+            if (flashcards.length === 0) return;
+            const card = document.querySelector('.flashcard');
+            card.classList.remove('flipped'); // Reset flip state
+            
+            setTimeout(() => {
+                document.getElementById('fc-front').textContent = flashcards[index].front;
+                document.getElementById('fc-back').textContent = flashcards[index].back;
+            }, 150); // Small delay to prevent seeing the text swap during transition
+        }
+
+        function nextCard() {
+            currentCardIndex = (currentCardIndex + 1) % flashcards.length;
+            showCard(currentCardIndex);
+        }
+    </script>
+</body>
+</html>
