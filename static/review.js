@@ -154,8 +154,9 @@
             if (token === sequence) {
                 loading = false;
                 updateControls();
-            if (current && active()) {
-                flashcard.focus({ preventScroll: true });
+                if (current && active()) {
+                    flashcard.focus({ preventScroll: true });
+                }
             }
         }
     }
