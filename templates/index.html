@@ -3,6 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="apprendre-user" content="{{ user.id }}">
+    <meta name="apprendre-username" content="{{ user.username }}">
+    <link rel="icon" href="/static/favicon.ico">
+    <script src="/static/session.js"></script>
 
     <title>Apprendre</title>
 
@@ -616,12 +620,13 @@
             submitButton.disabled = true;
 
             try {
-                const data = await ArticleReader.requestJSON(
+                const data = await AppSession.requestJSON(
                     "/api/ingest",
                     {
                         method: "POST",
                         body: new FormData(form),
-                    }
+                    },
+                    60000
                 );
 
                 if (data.success) {
@@ -662,7 +667,7 @@
             let articles;
 
             try {
-                articles = await ArticleReader.requestJSON("/api/articles");
+                articles = await AppSession.requestJSON("/api/articles");
             } catch (error) {
                 if (requestVersion !== sidebarRequestVersion) return;
                 throw error;
@@ -753,7 +758,7 @@
             readStatus.textContent = "";
 
             try {
-                const data = await ArticleReader.requestJSON(
+                const data = await AppSession.requestJSON(
                     `/api/articles/${encodeURIComponent(id)}`
                 );
 
@@ -790,7 +795,7 @@
             status.textContent = "";
 
             try {
-                await ArticleReader.requestJSON(
+                await AppSession.requestJSON(
                     `/api/articles/${encodeURIComponent(articleId)}/read`,
                     { method: "POST" }
                 );

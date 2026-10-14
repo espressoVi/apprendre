@@ -13,6 +13,14 @@ This repository contains code for an app to help me read articles in French.
 * Clicking on a word/MWE fetches meaning in-context from an LLM, including conjugations for verbs, etc.
 * Words and phrases can be added to an spaced-repetition system (FSRS) for revision.
 
+## Usage
+```
+APP_PUBLIC_ORIGIN=http://localhost:8000 \
+APP_COOKIE_SECURE=false \
+uv run uvicorn app:app --host 127.0.0.1 --port 8000 --reload
+```
+
 ## Planned Features
 * Multiple users, and their authentication.
 * Publishing as a standalone docker container to run on homelab.
+
