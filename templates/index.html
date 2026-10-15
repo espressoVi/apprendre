@@ -28,16 +28,7 @@
         }
 
         body {
-            font-family:
-                -apple-system,
-                BlinkMacSystemFont,
-                "Montserrat",
-                "EB Garamond",
-                "Segoe UI",
-                Roboto,
-                Helvetica,
-                Arial,
-                sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "Montserrat", "EB Garamond", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             background-color: var(--base);
             color: var(--text);
             margin: 0;
@@ -428,11 +419,7 @@
 
     <!-- Read Mode -->
     <div id="read-view" class="view active">
-        <div
-            class="sidebar"
-            id="article-list"
-            aria-label="Articles"
-        >
+        <div class="sidebar" id="article-list" aria-label="Articles">
             <div class="sidebar-message">Loading articles…</div>
         </div>
 
@@ -441,20 +428,9 @@
                 <h2 id="read-title"></h2>
 
                 <div class="read-actions">
-                    <button
-                        type="button"
-                        class="primary"
-                        id="mark-read-btn"
-                        onclick="markCurrentAsRead()"
-                    >Mark as Read</button>
-
-                    <span
-                        id="read-status"
-                        role="status"
-                        aria-live="polite"
-                    ></span>
+                    <button type="button" class="primary" id="mark-read-btn" onclick="markCurrentAsRead()">Mark as Read</button>
+                    <span id="read-status" role="status" aria-live="polite"></span>
                 </div>
-
                 <div id="read-body" lang="fr"></div>
             </div>
 

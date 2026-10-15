@@ -1,6 +1,8 @@
 #read-body {
     white-space: pre-wrap;
     overflow-wrap: anywhere;
+    text-align: justify;
+    text-justify: inter-word;
 }
 
 .lexical-unit {
