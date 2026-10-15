@@ -1,6 +1,5 @@
 # Python-generated files
 __pycache__/
-data/
 *.py[oc]
 build/
 dist/
@@ -10,3 +9,10 @@ wheels/
 # Virtual environments
 .venv
 uv.lock
+
+# directories
+data/
+backups/
+
+# Local settings
+.env
