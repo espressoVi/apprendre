@@ -1,8 +1,8 @@
 # Apprendre - The French Learning App
 
 > [!WARNING]
-> Most of the code in the repository is AI-generated slop. Only use it if you
-> know what you are doing.
+> Almost all of the code in this repository is AI-generated slop, and this
+> entire thing was created over one afternoon. Use with _caution_!
 
 This repository contains code for an app to help me read articles in French.
 
@@ -12,6 +12,7 @@ This repository contains code for an app to help me read articles in French.
 * The articles are segmented, and words or multi-word expressions (MWEs) are highlighted.
 * Clicking on a word/MWE fetches meaning in-context from an LLM, including conjugations for verbs, etc.
 * Words and phrases can be added to an spaced-repetition system (FSRS) for revision.
+* Multiple users, and their authentication.
 
 ## Usage
 ```
@@ -21,6 +22,4 @@ uv run uvicorn app:app --host 127.0.0.1 --port 8000 --reload
 ```
 
 ## Planned Features
-* Multiple users, and their authentication.
 * Publishing as a standalone docker container to run on homelab.
-
