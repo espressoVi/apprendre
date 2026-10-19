@@ -4,6 +4,8 @@
 > Almost all of the code in this repository is AI-generated slop, and this
 > entire thing was created over one afternoon. Use with _caution_!
 
+![Demo](demo.png)
+
 This repository contains code for a web-app to help me read articles in French.
 
 ## Features
